@@ -157,8 +157,9 @@ function Argv (args, cwd) {
     };
     
     var tasks = {};
-    self.task = function (key, descriptions, index) {
+    self.task = function (key, description, index) {
         index = typeof(index) == "undefined" ? 0 : index;
+        description = typeof(description) == "undefined" ? '' : description;
         tasks[index] = typeof(tasks[index]) == "undefined" ? [] : tasks[index];
         
         if (key.indexOf('-') == 0) {
