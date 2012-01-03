@@ -1,6 +1,6 @@
 {
     "name" : "fl-optimist",
-    "version" : "0.3.1-labors-1",
+    "version" : "0.3.1-1-flabors",
     "description" : "Forgotten Labors Initiative fork of http://github.com/substack/node-optimist",
     "main" : "./index.js",
     "directories" : {
