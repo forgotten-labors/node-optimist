@@ -1,5 +1,6 @@
 var path = require('path');
 var wordwrap = require('wordwrap');
+var cterm = require('color-terminal');
 
 /*  Hack an instance of Argv with process.argv into Argv
     so people can do
@@ -155,6 +156,21 @@ function Argv (args, cwd) {
         return self;
     };
     
+    var tasks = {};
+    self.task = function (key, descriptions, index) {
+        index = typeof(index) == "undefined" ? 0 : index;
+        tasks[index] = typeof(tasks[index]) == "undefined" ? [] : tasks[index];
+        
+        if (key.indexOf('-') == 0) {
+            key = key.replace(/(\-)+/, '')
+        }
+        
+        self.demand(index);
+            
+        tasks[index] = [key, description];
+        return self;
+    }
+    
     self.parse = function (args) {
         return Argv(args).argv;
     };
@@ -210,7 +226,36 @@ function Argv (args, cwd) {
             }, {})
         );
         
-        var help = keys.length ? [ 'Options:' ] : [];
+        if (tasks) {
+            var _tda = [];
+            for(var index in tasks) {
+              var task, description, _ref;
+              _ref = [tasks[index]['task'], tasks[index]['description']], task = _ref[0], description = _ref[1];
+              _tda.push([task, description]);
+            };
+        };
+        
+        var help = [];
+        
+        if(_tda && _tda instanceof Array && _tda.length) {
+            help = _tda.length ? [ 'Tasks:' ] : [];
+            var mkeylen = function(previousValue, currentValue, index, array) { return (previousValue.length > currentValue.length ? previousValue.length : currentValue.length) };
+            var _lt = Object.keys(_tda).reduce(mkeylen)
+            
+            var _lp = 3, _rp = _lt + 2;
+            help.push(cterm._bl(2));
+            
+            for(var index in _tda) {
+                var _trf, task, descr;
+                _trf = [_tda[index][0], _tda[index][1]], task = _trf[0], descr = _trf[1];
+                
+                var out = '' + cterm.reset(true) + '\033[2D' + '' + task + '' + '\033[' +  (_lt - task.length) + 'D' + description + '' + cterm.reset(true)
+                help.push(out)
+            }
+            help = help.length ? (help.push(cterm._bl(2)) && help) : help;
+        }
+          
+        help = keys.length ? (help instanceof Array ? (help.push('Options:') && help) : ['Options:']) : [];
         
         if (usage) {
             help.unshift(usage.replace(/\$0/g, self.$0), '');
@@ -425,10 +470,7 @@ function Argv (args, cwd) {
     }
     
     function longest (xs) {
-        return Math.max.apply(
-            null,
-            xs.map(function (x) { return x.length })
-        );
+        return Math.max.apply(null, xs.map(function (x) { return x.length }));
     }
     
     return self;

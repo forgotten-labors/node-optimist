@@ -1,7 +1,7 @@
 {
-    "name" : "optimist",
-    "version" : "0.3.1",
-    "description" : "Light-weight option parsing with an argv hash. No optstrings attached.",
+    "name" : "fl-optimist",
+    "version" : "0.3.1-labors-1",
+    "description" : "Forgotten Labors Initiative fork of http://github.com/substack/node-optimist",
     "main" : "./index.js",
     "directories" : {
         "lib" : ".",
@@ -9,7 +9,8 @@
         "example" : "examples"
     },
     "dependencies" : {
-        "wordwrap" : ">=0.0.1 <0.1.0"
+        "wordwrap" : ">=0.0.1 <0.1.0",
+        "color-terminal" : ">=0.0.3 <0.1.0"
     },
     "devDependencies" : {
         "hashish": "0.0.x",
@@ -20,7 +21,7 @@
     },
     "repository" : {
         "type" : "git",
-        "url" : "http://github.com/substack/node-optimist.git"
+        "url" : "http://github.com/forgotten-labors/node-optimist.git"
     },
     "keywords" : [
         "argument",
